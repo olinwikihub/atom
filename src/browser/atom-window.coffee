@@ -163,10 +163,10 @@ class AtomWindow
   openPath: (pathToOpen, initialLine, initialColumn) ->
     @openLocations([{pathToOpen, initialLine, initialColumn}])
 
-  openLocations: (locationsToOpen, options) ->
+  openLocations: (locationsToOpen) ->
     if @loaded
       @focus()
-      @sendMessage 'open-locations', locationsToOpen, options
+      @sendMessage 'open-locations', locationsToOpen
     else
       @browserWindow.once 'window:loaded', => @openLocations(locationsToOpen)
 
