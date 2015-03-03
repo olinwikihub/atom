@@ -242,6 +242,9 @@ class Workspace extends Model
   onDidOpen: (callback) ->
     @emitter.on 'did-open', callback
 
+  onWillOpen: (callback) ->
+    @emitter.on 'will-open', callback
+
   # Extended: Invoke the given callback when a pane is added to the workspace.
   #
   # * `callback` {Function} to be called panes are added.
@@ -391,6 +394,11 @@ class Workspace extends Model
   #
   # Returns a promise that resolves to the {TextEditor} for the file URI.
   open: (uri, options={}) ->
+    cancelOpen = false
+    cancel = -> cancelOpen = true
+    @emitter.emit('will-open', {uri, cancel, options})
+    return if cancelOpen
+
     searchAllPanes = options.searchAllPanes
     split = options.split
     uri = atom.project.resolvePath(uri)

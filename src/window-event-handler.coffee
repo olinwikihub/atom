@@ -20,7 +20,7 @@ class WindowEventHandler
         when 'open-locations'
           needsProjectPaths = atom.project?.getPaths().length is 0
 
-          for {pathToOpen, initialLine, initialColumn} in detail
+          for {pathToOpen, initialLine, initialColumn, isInitialEmptyBuffer} in detail
             if pathToOpen? and needsProjectPaths
               if fs.existsSync(pathToOpen)
                 atom.project.addPath(pathToOpen)
@@ -30,7 +30,7 @@ class WindowEventHandler
                   atom.project.addPath(dirToOpen)
 
             unless fs.isDirectorySync(pathToOpen)
-              atom.workspace?.open(pathToOpen, {initialLine, initialColumn})
+              atom.workspace?.open(pathToOpen, {initialLine, initialColumn, isInitialEmptyBuffer})
 
         when 'update-available'
           atom.updateAvailable(detail)

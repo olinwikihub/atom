@@ -73,6 +73,9 @@ class AtomWindow
     @browserWindow.loadUrl @getUrl(loadSettings)
     @browserWindow.focusOnWebView() if @isSpec
 
+    if locationsToOpen.length is 1 and locationsToOpen[0].pathToOpen is null
+      locationsToOpen[0].isInitialEmptyBuffer = true
+
     @openLocations(locationsToOpen) unless @isSpecWindow()
 
   getUrl: (loadSettingsObj) ->
@@ -160,10 +163,10 @@ class AtomWindow
   openPath: (pathToOpen, initialLine, initialColumn) ->
     @openLocations([{pathToOpen, initialLine, initialColumn}])
 
-  openLocations: (locationsToOpen) ->
+  openLocations: (locationsToOpen, options) ->
     if @loaded
       @focus()
-      @sendMessage 'open-locations', locationsToOpen
+      @sendMessage 'open-locations', locationsToOpen, options
     else
       @browserWindow.once 'window:loaded', => @openLocations(locationsToOpen)
 
